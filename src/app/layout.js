@@ -6,6 +6,7 @@ import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
 import HighlightsBar from "@/components/HighlightsBar";
 import Footer from "@/components/Footer";
+import Breadcrumb from "@/components/Breadcrumb";
 
 // 🖋️ Fonts
 const geistSans = Geist({
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
         <LanguageProvider>
           <TopBar />
           <Navbar />
+          <Breadcrumb />
           <div>{children}</div>
           <HighlightsBar />
           <Footer />

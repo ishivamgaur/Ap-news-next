@@ -1,0 +1,80 @@
+"use client";
+import { useState, useEffect } from "react";
+import NewsCard from "../../components/NewsCard";
+import { newsData, newsDataLive,getTechnologyArticles } from "../../data/newsData";
+
+const Technology = () => {
+  const [technologyArticles, setTechnologyArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const transformNewsItem = (item) => ({
+    id: item._id,
+    title: item.title,
+    description: item.summary,
+    fullDescription: item.content,
+    image: item.featuredImage?.url,
+    category: item.category,
+    date: item.publishAt,
+    youtubeVideoId: item.youtubeVideoId,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getTechnologyArticles();
+        const allNews = (response.data.articles || []).map(transformNewsItem);
+        const filteredNews = allNews.filter(
+          (item) => item.category.toUpperCase() === "TECHNOLOGY"
+        );
+        setTechnologyArticles(filteredNews);
+      } catch (error) {
+        console.error("Failed to fetch live news data:", error);
+        const filteredStaticNews = newsData.filter(
+          (item) => item.category.toUpperCase() === "TECHNOLOGY"
+        );
+        setTechnologyArticles(filteredStaticNews);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
+            Technology
+          </h1>
+          <p className="text-gray-600 mt-2 pl-4">
+            Tech innovations, gadgets, and digital trends
+          </p>
+        </div>
+
+        {isLoading ? (
+          <div className="text-center py-16">Loading articles...</div>
+        ) : technologyArticles.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {technologyArticles.map((news) => (
+              <NewsCard key={news.id} news={news} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center col-span-full py-16">
+            <h2 className="text-2xl font-semibold text-gray-700">
+              No Articles Found
+            </h2>
+            <p className="text-gray-500 mt-2">
+              There are currently no news articles available in this category.
+              Please check back later.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Technology;

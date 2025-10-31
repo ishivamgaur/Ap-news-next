@@ -43,7 +43,16 @@ const NewsCard = ({ news }) => {
           {news.description[language]}
         </p>
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-xs text-gray-500">{news.date}</span>
+          <span className="text-xs text-gray-500">
+            {new Date(news.date).toLocaleString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            })}
+          </span>
           <div className="flex items-center space-x-3">
             <Link
               href={`/${news.category.toLowerCase()}/article/${news.id}`}

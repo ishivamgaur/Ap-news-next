@@ -1,3 +1,6 @@
+import apiClient from "@/api";
+import axios from "axios";
+
 export const newsData = [
   {
     id: 1,
@@ -381,3 +384,27 @@ export const newsData = [
     date: "Oct 11, 2025",
   },
 ];
+
+export const newsDataLive = async () => {
+  return await apiClient.get("articles/all");
+};
+
+
+export const getBusinessArticles = async () => {
+  return await apiClient.get("articles/category/Business");
+};
+
+export const getBhojpuriArticles = async () => {
+  return await apiClient.get("articles/category/Bhojpuri");
+};
+
+
+export const getTechnologyArticles = async () => {
+  return await apiClient.get("articles/category/Technology");
+};
+
+export const getElectionsArticles = async () => {
+  return await apiClient.get("articles/category/Elections");
+};
+
+

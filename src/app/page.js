@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Breadcrumb from "../components/Breadcrumb";
 import FeaturedNews from "../components/FeaturedNews";
 import NewsCard from "../components/NewsCard";
 import VideoCard from "../components/VideoCard";
 import VideoModal from "../components/VideoModal";
-import { newsData } from "../data/newsData";
+import { newsData, newsDataLive } from "../data/newsData";
 import { useLanguage } from "../context/LanguageContext";
 import Pagination from "@/components/Pagination";
 import Sidebar from "@/components/SidebarScoreWidget";
@@ -15,31 +15,68 @@ import FloatingVideoPlayer from "@/components/FloatingVideoPlayer";
 
 const Home = () => {
   const { language } = useLanguage();
+  const [allNews, setAllNews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [playingVideoId, setPlayingVideoId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [videoPage, setVideoPage] = useState(1);
   const articlesPerPage = 6;
 
-  const featuredNews = useMemo(() => newsData[0], []);
-  const allOtherNews = useMemo(() => newsData.slice(1), []);
+  // This function transforms a single API article into the format our components expect.
+  const transformNewsItem = (item) => ({
+    id: item._id, // Map _id from API to id
+    title: item.title,
+    description: item.summary, // Map summary from API to description
+    fullDescription: item.content, // Map content from API to fullDescription
+    image: item.featuredImage?.url, // Map featuredImage.url from API to image
+    category: item.category,
+    date: item.publishAt, // Map publishAt to date
+    youtubeVideoId: item.youtubeVideoId,
+  });
+
+  // Fetch data on the client side
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await newsDataLive();
+        console.log("Raw API response:", response.data.items);
+        // The API response is an array directly, so we map over it.
+        const transformedNews = (response.data.items || []).map(transformNewsItem);  //Todo here i'll do it tommorrow
+        // const transformedNews = (response.data || []).map(transformNewsItem);
+        setAllNews(transformedNews);
+      } catch (error) {
+        console.error("Failed to fetch live news data:", error);
+        setAllNews(newsData); // Fallback to static data on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const featuredNews = useMemo(() => allNews[0], [allNews]);
+  const allOtherNews = useMemo(() => allNews.slice(1), [allNews]);
+  console.log("AllOtherNews:", allOtherNews);
   const videosPerPage = 4;
   const videoNews = useMemo(
-    () => newsData.filter((item) => item.youtubeVideoId),
-    []
+    () => allNews.filter((item) => item.youtubeVideoId),
+    [allNews]
   );
 
   const totalVideoPages = Math.ceil(videoNews.length / videosPerPage);
   const currentVideos = useMemo(() => {
     const start = (videoPage - 1) * videosPerPage;
     return videoNews.slice(start, start + videosPerPage);
-  }, [videoPage, videoNews]);
+  }, [videoPage, videoNews, videosPerPage]);
 
   // Pagination logic
   const totalPages = Math.ceil(allOtherNews.length / articlesPerPage);
   const currentArticles = useMemo(() => {
     const startIndex = (currentPage - 1) * articlesPerPage;
     return allOtherNews.slice(startIndex, startIndex + articlesPerPage);
-  }, [currentPage, allOtherNews]);
+  }, [currentPage, allOtherNews, articlesPerPage]);
 
   const handlePlayVideo = (videoId) => {
     setPlayingVideoId(videoId);
@@ -47,6 +84,14 @@ const Home = () => {
   const handleCloseModal = () => {
     setPlayingVideoId(null);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>

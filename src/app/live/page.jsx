@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { FaCircle } from "react-icons/fa";
-import apiClient from "../../../api"; // Import the configured axios instance
+import apiClient from "../../api"; // Import the configured axios instance
 
 const LiveNewsPage = () => {
   const [videoInfo, setVideoInfo] = useState({ id: null, isLive: false });
