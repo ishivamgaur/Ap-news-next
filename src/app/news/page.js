@@ -23,7 +23,7 @@ const AllNewsPage = () => {
       try {
         setIsLoading(true);
         const response = await newsDataLive();
-        const allNews = (response.data.data || []).map(transformNewsItem);
+        const allNews = (response.data.items || []).map(transformNewsItem);
         // For this page, we display all news, so no filtering is needed.
         setArticles(allNews);
       } catch (error) {

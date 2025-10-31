@@ -45,7 +45,7 @@ const Home = () => {
     try {
       const response = await newsDataLive(page);
       console.log("Response:", response);
-      const newItems = response.data.data || [];
+      const newItems = response.data.items || [];
       if (newItems.length === 0) {
         setHasMoreNews(false);
       } else {
