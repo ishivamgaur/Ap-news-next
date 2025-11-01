@@ -26,8 +26,8 @@ export default function ArticleClient({ article }) {
 
       <h1 className="text-4xl font-bold mb-4">{title}</h1>
 
-      <img
-        src={article.image}
+      <Image
+        src={article.image || "/Ap-news-article.png"}
         alt={title}
         width={800}
         height={450}
