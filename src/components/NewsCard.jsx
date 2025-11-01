@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useLanguage } from "../context/LanguageContext";
 import ShareButtons from "./ShareButtons";
@@ -5,6 +6,12 @@ const VIEWS_KEY = "apnews_views";
 
 const NewsCard = ({ news }) => {
   const { language } = useLanguage();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const recordView = () => {
     try {
       const raw = localStorage.getItem(VIEWS_KEY);
@@ -43,15 +50,16 @@ const NewsCard = ({ news }) => {
           {news.description[language]}
         </p>
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-xs text-gray-500">
-            {new Date(news.date).toLocaleString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-              hour12: true,
-            })}
+          <span className="text-xs text-gray-500 min-h-[16px]">
+            {isClient &&
+              new Date(news.date).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
           </span>
           <div className="flex items-center space-x-3">
             <Link
