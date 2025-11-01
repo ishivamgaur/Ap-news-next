@@ -20,7 +20,7 @@ export default function ArticleClient({ article }) {
       {/* Optional: Add published date */}
       {article?.date && (
         <p className="text-gray-500 text-sm mb-2">
-          Published: {new Date(article.date).toLocaleDateString()}
+          Published: {new Date(article.date).toLocaleDateString('en-GB')}
         </p>
       )}
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
+import {useLanguage} from "@/context/LanguageContext";
 import Image from "next/image";
 import ShareButtons from "@/components/ShareButtons";
 
-export default function ArticleClient({ article }) {
-  const { language } = useLanguage();
+export default function ArticleClient({article}) {
+  const {language} = useLanguage();
 
   // Add safe access with fallbacks
   const title =
@@ -20,7 +20,7 @@ export default function ArticleClient({ article }) {
       {/* Optional: Add published date */}
       {article?.date && (
         <p className="text-gray-500 text-sm mb-2">
-          Published: {new Date(article.date).toLocaleDateString()}
+          Published: {new Date(article.date).toLocaleDateString("en-GB")}
         </p>
       )}
 
