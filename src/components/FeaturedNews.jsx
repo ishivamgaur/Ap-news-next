@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { useLanguage } from "../context/LanguageContext";
+import {useLanguage} from "../context/LanguageContext";
 
-
-const FeaturedNews = ({ news }) => {
-  const { language } = useLanguage();
+const FeaturedNews = ({news}) => {
+  const {language} = useLanguage();
   console.log("FeaturedNews news prop:", news);
 
   if (!news) return null; // Add a guard clause in case news is not available
@@ -30,7 +29,11 @@ const FeaturedNews = ({ news }) => {
             {news.description[language]}
           </p>
           <Link
-            href={`/${news.category.toLowerCase()}/article/${news.id}`}
+            href={
+              news.category == "General"
+                ? `/news/article/${news.id}`
+                : `/${news.category.toLowerCase()}/article/${news.id}`
+            }
             className="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-2 rounded font-semibold transition-colors"
           >
             {language === "hi" ? "पूरी कहानी पढ़ें" : "Read Full Story"}

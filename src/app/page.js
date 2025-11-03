@@ -1,20 +1,22 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import Breadcrumb from "../components/Breadcrumb";
+import {useState, useMemo, useEffect, useRef, useCallback} from "react";
 import FeaturedNews from "../components/FeaturedNews";
 import NewsCard from "../components/NewsCard";
 import VideoCard from "../components/VideoCard";
 import VideoModal from "../components/VideoModal";
-import { newsData, newsDataLive } from "../data/newsData";
-import { useLanguage } from "../context/LanguageContext";
-import Pagination from "@/components/Pagination";
-import Sidebar from "@/components/SidebarScoreWidget";
+import {newsData, newsDataLive} from "../data/newsData";
+import {useLanguage} from "../context/LanguageContext";
+import Pagination from "../components/Pagination";
+import Sidebar from "../components/SidebarScoreWidget";
 import RightSidebarNews from "@/components/RSidebarLatestNews";
 import FloatingVideoPlayer from "@/components/FloatingVideoPlayer";
+import FeaturedNewsSkeleton from "../components/FeaturedNewsSkeleton";
+import VideoCardSkeleton from "../components/VideoCardSkeleton";
+import NewsCardSkeleton from "../components/NewsCardSkeleton";
 
 const Home = () => {
-  const { language } = useLanguage();
+  const {language} = useLanguage();
   const [allNews, setAllNews] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -112,8 +114,41 @@ const Home = () => {
 
   if (isInitialLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-xl">Loading...</div>
+      <div className="lg:flex">
+        <Sidebar />
+        <main className="flex-1 min-h-[60vh]">
+          <div className="container mx-auto px-4">
+            <div className="bg-gray-50 min-h-screen">
+              <div className="max-w-7xl px-4 lg:px-4 mx-auto py-4">
+                {/* Featured News Skeleton */}
+                <div className="mb-12">
+                  <FeaturedNewsSkeleton />
+                </div>
+
+                {/* Video News Skeleton */}
+                <div className="mb-12">
+                  <div className="h-9 bg-gray-300 rounded w-64 border-l-4 border-gray-300 pl-4 mb-6 animate-pulse"></div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[...Array(4)].map((_, index) => (
+                      <VideoCardSkeleton key={index} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Latest News Skeleton */}
+                <div>
+                  <div className="h-9 bg-gray-300 rounded w-64 border-l-4 border-gray-300 pl-4 mb-6 animate-pulse"></div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[...Array(6)].map((_, index) => (
+                      <NewsCardSkeleton key={index} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <RightSidebarNews />
       </div>
     );
   }
@@ -124,7 +159,6 @@ const Home = () => {
         <Sidebar />
         <main className="flex-1 min-h-[60vh]">
           <div className="container mx-auto px-4">
-            <Breadcrumb />
             <div className="bg-gray-50 min-h-screen">
               <div className="max-w-7xl px-4 lg:px-4 mx-auto py-4">
                 {/* Featured News Section */}
@@ -171,10 +205,16 @@ const Home = () => {
                         <NewsCard news={news} />
                       </div>
                     ))}
+
+                    {isFetchingMore && (
+                      <>
+                        {[...Array(10)].map((_, index) => (
+                          <NewsCardSkeleton key={index} />
+                        ))}
+                      </>
+                    )}
                   </div>
-                  {isFetchingMore && (
-                    <div className="text-center py-4">Loading more...</div>
-                  )}
+
                   {!hasMoreNews && allNews.length > 1 && (
                     <div className="text-center py-4">
                       No more news to load.

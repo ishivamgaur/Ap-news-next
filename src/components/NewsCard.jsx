@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import Link from "next/link";
-import { useLanguage } from "../context/LanguageContext";
+import {useLanguage} from "../context/LanguageContext";
 import ShareButtons from "./ShareButtons";
 const VIEWS_KEY = "apnews_views";
 
-const NewsCard = ({ news }) => {
-  const { language } = useLanguage();
+const NewsCard = ({news}) => {
+  const {language} = useLanguage();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -63,7 +63,11 @@ const NewsCard = ({ news }) => {
           </span>
           <div className="flex items-center space-x-3">
             <Link
-              href={`/${news.category.toLowerCase()}/article/${news.id}`}
+              href={
+                news.category == "General"
+                  ? `/news/article/${news.id}`
+                  : `/${news.category.toLowerCase()}/article/${news.id}`
+              }
               onClick={recordView}
               className="text-red-700 text-sm font-semibold hover:underline"
             >
@@ -71,7 +75,11 @@ const NewsCard = ({ news }) => {
             </Link>
             <ShareButtons
               title={news.title[language]}
-              url={`/${news.category.toLowerCase()}/article/${news.id}`}
+              url={
+                news.category == "General"
+                  ? `/news/article/${news.id}`
+                  : `/${news.category.toLowerCase()}/article/${news.id}`
+              }
             />
           </div>
         </div>
