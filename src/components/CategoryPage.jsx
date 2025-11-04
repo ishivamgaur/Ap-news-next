@@ -1,10 +1,10 @@
 "use client";
 
 import NewsCard from "@/components/NewsCard";
-import { newsData } from "../data/newsData";
-import { useLanguage } from "../context/LanguageContext";
+import { newsData } from "@/data/newsData";
+import { useLanguage } from "@/context/LanguageContext";
 import { useState, useMemo } from "react";
-import Pagination from "./Pagination";
+import Pagination from "@/components/Pagination";
 
 const CategoryPage = ({ title, subtitle, category }) => {
   const { language } = useLanguage();

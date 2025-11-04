@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from "react";
 import NewsCard from "@/components/NewsCard.jsx";
-import {newsData, newsDataLive} from "../../data/newsData.js";
+import {newsData, newsDataLive} from "@/data/newsData.js";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton.jsx";
 
 const AllNewsPage = () => {

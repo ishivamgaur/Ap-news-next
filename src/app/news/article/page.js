@@ -1,7 +1,7 @@
 "use client";
 import {useState, useEffect} from "react";
 import NewsCard from "@/components/NewsCard";
-import {newsData, newsDataLive} from "../../data/newsData";
+import {newsData, newsDataLive} from "@/data/newsData";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton";
 
 const AllNewsPage = () => {

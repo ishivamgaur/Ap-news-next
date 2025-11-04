@@ -5,7 +5,7 @@ import {
   newsData,
   newsDataLive,
   getTechnologyArticles,
-} from "../../data/newsData";
+} from "@/data/newsData";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton";
 
 const Technology = () => {

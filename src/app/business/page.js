@@ -1,8 +1,8 @@
 "use client";
 import {useState, useEffect} from "react";
 import NewsCard from "@/components/NewsCard"; 
-import {newsData, newsDataLive, getBusinessArticles} from "../../data/newsData";
-import NewsCardSkeleton from "../../components/NewsCardSkeleton";
+import {newsData, newsDataLive, getBusinessArticles} from "@/data/newsData";
+import NewsCardSkeleton from "@/components/NewsCardSkeleton";
 
 const BusinessPage = () => {
   const [businessArticles, setBusinessArticles] = useState([]);
