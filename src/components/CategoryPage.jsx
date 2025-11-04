@@ -1,6 +1,6 @@
 "use client";
 
-import NewsCard from "./NewsCard";
+import NewsCard from "@/components/NewsCard";
 import { newsData } from "../data/newsData";
 import { useLanguage } from "../context/LanguageContext";
 import { useState, useMemo } from "react";
