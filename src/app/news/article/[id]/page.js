@@ -1,15 +1,7 @@
 import { getArticleDetailsById, newsDataLive } from "@/data/newsData";
 import ArticleClient from "./ArticleClient";
 
-export async function generateStaticParams() {
-  const articles = await newsDataLive();
-  if (!articles.data.articles) {
-    return [];
-  }
-  return articles.data.articles.map((article) => ({
-    id: article._id.toString(),
-  }));
-}
+export const dynamic = "force-dynamic";
 
 const transformNewsItem = (item) => ({
   id: item._id,

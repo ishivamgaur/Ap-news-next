@@ -5,6 +5,7 @@ import ShareButtons from "./ShareButtons";
 const VIEWS_KEY = "apnews_views";
 
 const NewsCard = ({news}) => {
+  console.log("Rendering NewsCard for news: ", news);
   const {language} = useLanguage();
   const [isClient, setIsClient] = useState(false);
 
@@ -46,9 +47,14 @@ const NewsCard = ({news}) => {
             {news.title[language]}
           </Link>
         </h3>
-        <p className="text-gray-600 text-sm line-clamp-3">
-          {news.description[language]}
-        </p>
+        <div className="flex flex-col space-y-1">
+          <p className="text-gray-600 text-sm font-semibold line-clamp-3">
+            {news.description[language]}
+          </p>
+          <p className="text-gray-800 text-sm line-clamp-4">
+            {news.fullDescription[language]}
+          </p>
+        </div>
         <div className="mt-3 flex items-center justify-between">
           <span className="text-xs text-gray-500 min-h-4">
             {isClient &&
