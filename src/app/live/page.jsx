@@ -1,74 +1,48 @@
 "use client";
-import {useState, useEffect} from "react";
-import {FaCircle} from "react-icons/fa";
-import apiClient from "../../api"; // Import the configured axios instance
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  useGetLiveVideoQuery,
+  useGetRecentVideosQuery,
+} from "@/store/api/youtubeApi";
 
 const LiveNewsPage = () => {
-  const [videoInfo, setVideoInfo] = useState({id: null, isLive: false});
-  const [recentVideos, setRecentVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRecentLoading, setIsRecentLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Use the RTK Query hook to fetch live video data.
+  // It automatically handles loading, error, and data states.
+  const {
+    data: liveVideoData,
+    error: liveError,
+    isLoading: isLiveLoading,
+  } = useGetLiveVideoQuery();
+  console.log("Live video data:", liveVideoData);
 
+  // Fetch recent videos
+  const {
+    data: recentVideosData,
+    error: recentError,
+    isLoading: isRecentLoading,
+  } = useGetRecentVideosQuery();
+
+  const liveVideoId = liveVideoData?.video?.items?.[0]?.id?.videoId;
+  const isLive = liveVideoData?.isLive;
+  const recentVideos = recentVideosData?.items || [];
+
+  // Local state to manage which video is currently playing in the iframe
+  const [currentVideoId, setCurrentVideoId] = useState(null);
+
+  // Set the current video ID once the live video data is available
   useEffect(() => {
-    const fetchLiveVideo = async () => {
-      try {
-        // Use axios to fetch from your backend. The baseURL is already set.
-        const response = await apiClient.get("/youtube/live");
-        const {video, isLive} = response.data;
-
-        if (video?.items?.length > 0) {
-          setVideoInfo({
-            id: video.items[0].id.videoId,
-            isLive: isLive,
-          });
-        } else {
-          setError("No live stream is currently active on this channel.");
-        }
-      } catch (error) {
-        // Extract the specific error message from the backend response
-        const errorMessage =
-          error.response?.data?.message ||
-          "Could not fetch video. Please try again later.";
-        console.error(
-          "Failed to fetch live video:",
-          error.response?.data || error
-        );
-        setError(errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    const fetchRecentVideos = async () => {
-      try {
-        const response = await apiClient.get("youtube/recent-videos");
-        console.log("Recent Videos:", response.data);
-        let allVideos = response.data.items || [];
-        setRecentVideos(allVideos);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Could not fetch recent videos.";
-        console.error(
-          "Failed to fetch recent videos:",
-          error.response?.data || error
-        );
-        setError(errorMessage);
-      } finally {
-        setIsRecentLoading(false);
-      }
-    };
-
-    fetchLiveVideo();
-    fetchRecentVideos();
-  }, []);
+    if (liveVideoId) {
+      setCurrentVideoId(liveVideoId);
+    }
+  }, [liveVideoId]);
 
   function handlePlayRecentVideos(videoId) {
-    setVideoInfo({id: videoId, isLive: false});
+    setCurrentVideoId(videoId);
   }
 
   const renderPlayer = () => {
-    if (isLoading) {
+    if (isLiveLoading) {
       return (
         <p className="text-white text-center text-lg">
           Searching for live stream...
@@ -76,12 +50,16 @@ const LiveNewsPage = () => {
       );
     }
 
-    if (error) {
-      return <p className="text-red-400 text-center text-lg">{error}</p>;
+    if (liveError) {
+      return (
+        <p className="text-red-400 text-center text-lg">
+          {liveError.data?.message || "Could not fetch video."}
+        </p>
+      );
     }
 
-    if (videoInfo.id) {
-      const liveStreamUrl = `https://www.youtube.com/embed/${videoInfo.id}?autoplay=1&mute=1`;
+    if (currentVideoId) {
+      const liveStreamUrl = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=1`;
       return (
         <div className="w-full aspect-video">
           <iframe
@@ -104,8 +82,10 @@ const LiveNewsPage = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center mb-6">
           <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 flex items-center">
-            {videoInfo.isLive ? "Live News" : "Latest Video"}
-            {videoInfo.isLive && (
+            {isLive && currentVideoId === liveVideoId
+              ? "Live News"
+              : "Latest Video"}
+            {isLive && currentVideoId === liveVideoId && (
               <span className="relative flex h-3 w-3 ml-4">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
@@ -114,7 +94,7 @@ const LiveNewsPage = () => {
           </h1>
         </div>
         <p className="text-gray-600 mb-8 pl-4">
-          {videoInfo.isLive
+          {isLive && currentVideoId === liveVideoId
             ? "Watch our live broadcast and get real-time updates as they happen."
             : "Watch our most recent video."}
         </p>

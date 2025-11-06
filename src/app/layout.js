@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import StoreProvider from "@/store/StoreProvider"
 import { LanguageProvider } from "@/context/LanguageContext";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
@@ -32,14 +33,16 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <LanguageProvider>
-          <TopBar />
-          <Navbar />
-          <Breadcrumb />
-          <div>{children}</div>
-          <HighlightsBar />
-          <Footer />
-        </LanguageProvider>
+        <StoreProvider>
+          <LanguageProvider>
+            <TopBar />
+            <Navbar />
+            <Breadcrumb />
+            <div>{children}</div>
+            <HighlightsBar />
+            <Footer />
+          </LanguageProvider>
+        </StoreProvider>
       </body>
     </html>
   );
