@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import AdComponent from "./AdComponent";
+import Link from "next/link";
 
 const SidebarScoreWidget = () => {
   const { language } = useLanguage();
@@ -80,9 +81,9 @@ const SidebarScoreWidget = () => {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-center text-green-600 font-semibold">
+          <Link href={"/election-results"} className="text-lg text-center block hover:underline text-green-600 font-semibold">
             {language === "hi" ? "परिणाम का दिन है!" : "It's Result Day!"}
-          </p>
+          </Link>
         )}
       </div>
 
