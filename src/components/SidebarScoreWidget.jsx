@@ -49,14 +49,14 @@ const SidebarScoreWidget = () => {
       <div className=" mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
         <div className="flex mb-2 justify-center items-center">
           <span className="relative flex h-4 w-4 mr-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-600"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-green-600"></span>
           </span>
-          <h2 className="text-lg font-bold text-red-800">
+          {/* <h2 className="text-lg font-bold text-red-800">
             {language === "hi"
               ? "बिहार विधानसभा चुनाव परिणाम"
               : "Bihar Legislative Election Result"}
-          </h2>
+          </h2> */}
         </div>
 
         {Object.keys(timeLeft).length > 0 ? (
@@ -82,7 +82,7 @@ const SidebarScoreWidget = () => {
           </div>
         ) : (
           <Link href={"/election-results"} className="text-lg text-center block hover:underline text-green-600 font-semibold">
-            {language === "hi" ? "परिणाम का दिन है!" : "It's Result Day!"}
+            {language === "hi" ? "चुनाव परिणाम" : "Election Results"}
           </Link>
         )}
       </div>
