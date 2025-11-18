@@ -5,12 +5,72 @@ import { useLanguage } from "../context/LanguageContext";
 import GoogleAds from "./GoogleAds";
 import AdComponent from "./AdComponent";
 import Link from "next/link";
+import { useGetLiveVideoQuery } from "@/store/api/youtubeApi";
 
 const API_KEY = process.env.NEXT_PUBLIC_NEWSDATA_API_KEY;
 const RightSidebarNews = () => {
   const { language } = useLanguage();
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const {
+    data: liveVideoData,
+    error: liveError,
+    isLoading: isLiveLoading,
+  } = useGetLiveVideoQuery();
+  console.log("Live video data:", liveVideoData);
+
+  const liveVideoId = liveVideoData?.video?.items?.[0]?.id?.videoId;
+  const isLive = liveVideoData?.isLive;
+
+  const [currentVideoId, setCurrentVideoId] = useState(null);
+
+  // Set the current video ID once the live video data is available
+  useEffect(() => {
+    if (liveVideoId) {
+      setCurrentVideoId(liveVideoId);
+    }
+  }, [liveVideoId]);
+
+  function handlePlayRecentVideos(videoId) {
+    setCurrentVideoId(videoId);
+  }
+
+  const renderPlayer = () => {
+    if (isLiveLoading) {
+      return (
+        <p className="text-white text-center text-lg">
+          Searching for live stream...
+        </p>
+      );
+    }
+
+    if (liveError) {
+      return (
+        <p className="text-red-400 text-center text-lg">
+          {liveError.data?.message || "Could not fetch video."}
+        </p>
+      );
+    }
+
+    if (currentVideoId) {
+      const liveStreamUrl = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=1`;
+      return (
+        <div className="w-full aspect-video">
+          <iframe
+            src={liveStreamUrl}
+            title="Live News Broadcast"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          ></iframe>
+        </div>
+      );
+    }
+
+    return <p className="text-white text-center text-lg">No video found.</p>;
+  };
 
   const exitPoleDummy = {
     2025: {
@@ -100,8 +160,7 @@ const RightSidebarNews = () => {
     // =======
   }, [langParam]);
 
-
-  console.log("Right side bar news", news)
+  console.log("Right side bar news", news);
 
   return (
     <aside
@@ -110,47 +169,14 @@ const RightSidebarNews = () => {
       }
     >
       <div className="flex flex-col gap-4">
-        {/* ads */}
-        {/* <GoogleAds adSlot="4686474218" adFormat="auto" /> */}
-        {/* Exit pole */}
-        <div className="p-2 pb-4 bg-gray-100 rounded-md">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-red-700 text-left">
-              {language === "hi"
-                ? "एग्जिट पोल बिहार 2025"
-                : "Exit Poll Bihar 2025"}
-            </h2>
-            <p className="text-xs text-gray-500">
-              {language === "hi"
-                ? `कुल सीटें: ${exitPoleDummy[2025].total_seats}`
-                : `Total Seats: ${exitPoleDummy[2025].total_seats}`}
-            </p>
-          </div>
+        <p className="text-gray-600 text-xl font-semibold">
+          {isLive && currentVideoId === liveVideoId
+            ? "Live Video"
+            : "Latest Video"}
+        </p>
 
-          <div className="space-y-4">
-            {exitPoleDummy[2025].parties.map((party, index) => (
-              <div key={index} className="text-sm">
-                <div className="flex justify-between mb-1 font-semibold">
-                  <span>{party.name}</span>
-                  <span>{party.seats}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    className="bg-red-600 h-2.5 rounded-full"
-                    style={{
-                      width: `${
-                        (party.seats / exitPoleDummy[2025].total_seats) * 100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-right mt-2 text-xs text-gray-400">
-            {language === "hi" ? "अंतिम अपडेट: " : "Last Updated: "}
-            {new Date(exitPoleDummy[2025].last_updated).toLocaleDateString()}
-          </div>
+        <div className=" bg-black aspect-video rounded-lg overflow-hidden shadow-lg flex items-center justify-center">
+          {renderPlayer()}
         </div>
 
         {/* News */}
@@ -176,7 +202,8 @@ const RightSidebarNews = () => {
                 className="mb-3 p-3 border border-gray-300 rounded-md hover:shadow-md transition-shadow bg-white"
               >
                 <Link
-                  target="_blank" href={`${item.link}`}
+                  target="_blank"
+                  href={`${item.link}`}
                   className="text-sm font-medium text-red-600 hover:underline"
                 >
                   {item.title}

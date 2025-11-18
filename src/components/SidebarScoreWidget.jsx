@@ -81,7 +81,10 @@ const SidebarScoreWidget = () => {
             ))}
           </div>
         ) : (
-          <Link href={"/election-results"} className="text-lg text-center block hover:underline text-green-600 font-semibold">
+          <Link
+            href={"/election-results"}
+            className="text-lg text-center block hover:underline text-green-600 font-semibold"
+          >
             {language === "hi" ? "चुनाव परिणाम" : "Election Results"}
           </Link>
         )}
