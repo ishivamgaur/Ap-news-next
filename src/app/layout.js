@@ -8,6 +8,8 @@ import Navbar from "@/components/Navbar";
 import HighlightsBar from "@/components/HighlightsBar";
 import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
+import Head from "next/head";
+import Script from "next/script";
 
 // 🖋️ Fonts
 const geistSans = Geist({
@@ -30,13 +32,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <script
+      <Head>
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5516481292318087"
+          strategy="lazyOnload"
           crossOrigin="anonymous"
-        ></script>
-      </head>
+        ></Script>
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >

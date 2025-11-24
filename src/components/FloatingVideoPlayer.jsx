@@ -18,7 +18,7 @@ const FloatingVideoPlayer = () => {
   }
 
   return (
-    <div className="fixed bottom-20 right-4 w-80 md:w-80 rounded-lg shadow-2xl z-50  animate-fade-in-up ">
+    <div className="fixed bottom-12 right-4 w-60 md:w-60 rounded-lg shadow-2xl z-50  animate-fade-in-up ">
       <div className="relative rounded-lg ">
         <button
           onClick={() => setIsOpen(false)}

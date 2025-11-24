@@ -125,10 +125,8 @@ const RightSidebarNews = () => {
         ]);
 
         if (!enResponse.ok || !hiResponse.ok) throw new Error(`HTTP error`);
-
         const enData = await enResponse.json();
         const hiData = await hiResponse.json();
-
         if (enData.results && hiData.results) {
           const newsToCache = {
             en: enData.results.slice(0, 10),
@@ -154,9 +152,6 @@ const RightSidebarNews = () => {
     loadNews();
 
     return () => controller.abort();
-    // <<<<<<< HEAD
-    //   }, [language]);
-
     // =======
   }, [langParam]);
 

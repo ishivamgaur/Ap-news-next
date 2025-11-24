@@ -109,7 +109,7 @@ export default function ArticleClient({ article }) {
           
           <ShareButtons
             title={title}
-            url={`/${article?.category}/article/${article?.id}`}
+            url={`/${article?.category?.toLowerCase()}/article/${article?.id}`}
           />
         </div>
       </div>
