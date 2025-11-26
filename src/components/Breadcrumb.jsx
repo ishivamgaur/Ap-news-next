@@ -26,7 +26,7 @@ const Breadcrumb = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav
           aria-label="Breadcrumb"
-          className="flex py-3 text-gray-700 overflow-x-auto whitespace-nowrap scrollbar-hide"
+          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-white shadow-sm overflow-x-auto whitespace-nowrap scrollbar-hide"
         >
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li className="inline-flex items-center">
@@ -45,11 +45,13 @@ const Breadcrumb = () => {
               const isArticleSegment = name.toLowerCase() === "article";
 
               let displayName;
+              let categoryMatch = null;
+
               if (isArticleSegment) {
                 displayName = translations[language].article;
               } else {
                 // Try to find a matching category title
-                const categoryMatch = categories.find(
+                categoryMatch = categories.find(
                   (cat) => cat.path.substring(1) === name.toLowerCase()
                 );
                 displayName = categoryMatch
@@ -58,8 +60,11 @@ const Breadcrumb = () => {
                     name.slice(1).replace(/-/g, " ");
               }
 
+              // Determine if we should truncate (only for IDs, not categories)
+              const shouldTruncate = !categoryMatch && !isArticleSegment;
+
               const truncatedName =
-                displayName.length > 5
+                shouldTruncate && displayName.length > 5
                   ? displayName.slice(0, 5) + "..."
                   : displayName;
 
