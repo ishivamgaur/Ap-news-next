@@ -129,12 +129,16 @@ const Navbar = () => {
             </div>
 
             <div className="lg:hidden flex items-center space-x-4">
-              <button
-                onClick={() => setIsJoinPopupOpen(true)}
-                className="text-red-700 hover:text-red-800"
+              <Link
+                href={liveLink.path}
+                className="flex items-center gap-1.5 bg-red-50 text-red-700 px-3 py-1.5 rounded-full text-xs font-bold border border-red-100"
               >
-                <FaUserPlus size={20} />
-              </button>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+                </span>
+                {liveLink.name[language]}
+              </Link>
               <div
                 className="flex items-center cursor-pointer"
                 onClick={toggleLanguage}

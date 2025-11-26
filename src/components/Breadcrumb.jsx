@@ -23,7 +23,7 @@ const Breadcrumb = () => {
 
   return (
     <div className="bg-gray-50 py-4">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav
           aria-label="Breadcrumb"
           className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-white shadow-sm overflow-x-auto whitespace-nowrap scrollbar-hide"

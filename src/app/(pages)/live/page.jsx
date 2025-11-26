@@ -15,8 +15,66 @@ import {
 } from "react-icons/fa";
 
 import JoinTeamPopup from "@/components/JoinTeamPopup";
+import { useLanguage } from "@/context/LanguageContext";
 
 const LiveNewsPage = () => {
+  const { language } = useLanguage();
+
+  const translations = {
+    en: {
+      liveNow: "Live Now",
+      latestVideo: "Latest Video",
+      liveBroadcastTitle: "Live News Broadcast",
+      studioTitle: "AP News Studio",
+      share: "Share",
+      subscribe: "Subscribe",
+      breakingNewsTitle: "Breaking News: Live Coverage from Bihar & Jharkhand",
+      topStoriesTitle: "Top Stories & Analysis",
+      liveDescription:
+        "Watch our live broadcast and get real-time updates as they happen. Stay informed with exclusive reports from our dedicated team.",
+      topStoriesDescription:
+        "Catch up on the latest developments. We bring you the stories that matter most to the region with in-depth analysis.",
+      recentVideos: "Recent Videos",
+      videosCount: "Videos",
+      loading: "Loading content...",
+      error: "Unable to load content.",
+      selectVideo: "Select a video to play.",
+      viewArchives: "View All Archives",
+      joinCommunityTitle: "Join Our Growing Community",
+      joinCommunityDesc:
+        "Be part of the conversation. Subscribe to our channel for exclusive content, live debates, and behind-the-scenes access.",
+      joinTeam: "Join Team",
+      subscribeYouTube: "Subscribe on YouTube",
+    },
+    hi: {
+      liveNow: "अभी लाइव",
+      latestVideo: "नवीनतम वीडियो",
+      liveBroadcastTitle: "लाइव समाचार प्रसारण",
+      studioTitle: "एपी न्यूज़ स्टूडियो",
+      share: "साझा करें",
+      subscribe: "सदस्य बनें",
+      breakingNewsTitle: "ब्रेकिंग न्यूज़: बिहार और झारखंड से लाइव कवरेज",
+      topStoriesTitle: "प्रमुख खबरें और विश्लेषण",
+      liveDescription:
+        "हमारा लाइव प्रसारण देखें और पल-पल की अपडेट प्राप्त करें। हमारी समर्पित टीम की विशेष रिपोर्टों के साथ सूचित रहें।",
+      topStoriesDescription:
+        "नवीनतम घटनाओं पर नज़र डालें। हम आपके लिए क्षेत्र की सबसे महत्वपूर्ण कहानियाँ और गहन विश्लेषण लाते हैं।",
+      recentVideos: "हालिया वीडियो",
+      videosCount: "वीडियो",
+      loading: "सामग्री लोड हो रही है...",
+      error: "सामग्री लोड करने में असमर्थ।",
+      selectVideo: "चलाने के लिए एक वीडियो चुनें।",
+      viewArchives: "सभी संग्रह देखें",
+      joinCommunityTitle: "हमारे बढ़ते समुदाय में शामिल हों",
+      joinCommunityDesc:
+        "बातचीत का हिस्सा बनें। विशेष सामग्री, लाइव बहस और पर्दे के पीछे की पहुंच के लिए हमारे चैनल को सब्सक्राइब करें।",
+      joinTeam: "टीम में शामिल हों",
+      subscribeYouTube: "YouTube पर सब्सक्राइब करें",
+    },
+  };
+
+  const t = translations[language];
+
   // Use the RTK Query hook to fetch live video data.
   const {
     data: liveVideoData,
@@ -39,7 +97,6 @@ const LiveNewsPage = () => {
   const [currentVideoId, setCurrentVideoId] = useState(null);
   const [isJoinPopupOpen, setIsJoinPopupOpen] = useState(false);
 
-  // Effect to set the initial video (Live > First Recent)
   // Effect to set the initial video (Live > First Recent)
   useEffect(() => {
     // If a video is already selected (by user or previous default), don't override it
@@ -66,9 +123,7 @@ const LiveNewsPage = () => {
       return (
         <div className="flex flex-col items-center justify-center h-full text-gray-500 space-y-4">
           <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-lg font-medium tracking-wide">
-            Loading content...
-          </p>
+          <p className="text-lg font-medium tracking-wide">{t.loading}</p>
         </div>
       );
     }
@@ -76,7 +131,7 @@ const LiveNewsPage = () => {
     if (liveError && !recentVideos.length) {
       return (
         <div className="flex flex-col items-center justify-center h-full text-red-500 space-y-2">
-          <p className="text-lg font-medium">Unable to load content.</p>
+          <p className="text-lg font-medium">{t.error}</p>
         </div>
       );
     }
@@ -100,7 +155,7 @@ const LiveNewsPage = () => {
     return (
       <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
         <FaYoutube size={48} />
-        <p className="text-lg">Select a video to play.</p>
+        <p className="text-lg">{t.selectVideo}</p>
       </div>
     );
   };
@@ -113,42 +168,32 @@ const LiveNewsPage = () => {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
                 {isPlayingLive ? (
-                  <span className="flex items-center gap-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm animate-pulse">
-                    <FaCircle size={8} /> Live Now
+                  <span className="flex items-center gap-2 bg-red-600 text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm animate-pulse">
+                    <FaCircle size={6} /> {t.liveNow}
                   </span>
                 ) : (
-                  <span className="bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                    Latest Video
+                  <span className="bg-gray-800 text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                    {t.latestVideo}
                   </span>
                 )}
-                <span className="text-gray-500 text-sm font-medium flex items-center gap-1">
-                  <FaClock size={12} />{" "}
-                  {new Date().toLocaleDateString("en-US", {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                <span className="text-gray-500 text-xs sm:text-sm font-medium flex items-center gap-1">
+                  <FaClock size={10} className="sm:w-3 sm:h-3" />{" "}
+                  {new Date().toLocaleDateString(
+                    language === "hi" ? "hi-IN" : "en-US",
+                    {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    }
+                  )}
                 </span>
               </div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight">
-                {isPlayingLive ? "Live News Broadcast" : "AP News Studio"}
+                {isPlayingLive ? t.liveBroadcastTitle : t.studioTitle}
               </h1>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-full transition-all text-sm font-medium border border-gray-200">
-                <FaShareAlt /> Share
-              </button>
-              <Link
-                href="https://www.youtube.com/@apnewsbihar6217"
-                target="_blank"
-                className="flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white px-6 py-2 rounded-full transition-all shadow-lg shadow-red-900/20 text-sm font-bold tracking-wide transform hover:-translate-y-0.5"
-              >
-                <FaYoutube size={16} /> Subscribe
-              </Link>
             </div>
           </div>
 
@@ -161,31 +206,28 @@ const LiveNewsPage = () => {
 
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {isPlayingLive
-                    ? "Breaking News: Live Coverage from Bihar & Jharkhand"
-                    : "Top Stories & Analysis"}
+                  {isPlayingLive ? t.breakingNewsTitle : t.topStoriesTitle}
                 </h2>
                 <p className="text-gray-600 leading-relaxed max-w-3xl">
-                  {isPlayingLive
-                    ? "Watch our live broadcast and get real-time updates as they happen. Stay informed with exclusive reports from our dedicated team."
-                    : "Catch up on the latest developments. We bring you the stories that matter most to the region with in-depth analysis."}
+                  {isPlayingLive ? t.liveDescription : t.topStoriesDescription}
                 </p>
               </div>
             </div>
 
             {/* Playlist Column */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col h-full max-h-[calc(100vh-12rem)] sticky top-24 shadow-sm">
-                <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col h-full lg:max-h-[calc(100vh-12rem)] lg:sticky lg:top-24 shadow-sm">
+                <div className="p-4 lg:p-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
                   <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
-                    <FaPlay className="text-red-600" size={14} /> Recent Videos
+                    <FaPlay className="text-red-600" size={14} />{" "}
+                    {t.recentVideos}
                   </h3>
                   <span className="text-xs font-medium text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
-                    {recentVideos.length} Videos
+                    {recentVideos.length} {t.videosCount}
                   </span>
                 </div>
 
-                <div className="overflow-y-auto p-2 space-y-1 custom-scrollbar grow">
+                <div className="lg:overflow-y-auto p-2 space-y-1 custom-scrollbar grow">
                   {isRecentLoading
                     ? [...Array(5)].map((_, i) => (
                         <div
@@ -246,11 +288,14 @@ const LiveNewsPage = () => {
                               <p className="text-xs text-gray-500">
                                 {new Date(
                                   video.snippet.publishedAt
-                                ).toLocaleDateString(undefined, {
-                                  year: "numeric",
-                                  month: "short",
-                                  day: "numeric",
-                                })}
+                                ).toLocaleDateString(
+                                  language === "hi" ? "hi-IN" : "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  }
+                                )}
                               </p>
                             </div>
                           </div>
@@ -264,7 +309,7 @@ const LiveNewsPage = () => {
                     target="_blank"
                     className="block w-full text-center py-2.5 rounded-lg bg-white hover:bg-gray-50 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors border border-gray-200 shadow-sm"
                   >
-                    View All Archives
+                    {t.viewArchives}
                   </Link>
                 </div>
               </div>
@@ -280,25 +325,27 @@ const LiveNewsPage = () => {
             <FaUsers size={24} />
           </div>
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
-            Join Our Growing Community
+            {t.joinCommunityTitle}
           </h2>
           <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
-            Be part of the conversation. Subscribe to our channel for exclusive
-            content, live debates, and behind-the-scenes access.
+            {t.joinCommunityDesc}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => setIsJoinPopupOpen(true)}
               className="w-full sm:w-auto px-8 py-3 bg-red-700 text-white font-bold rounded-full hover:bg-red-800 transition-colors shadow-lg shadow-red-900/20"
             >
-              Join Team
+              {t.joinTeam}
+            </button>
+            <button className="w-full sm:w-auto px-8 py-3 bg-gray-100 text-gray-700 font-bold rounded-full hover:bg-gray-200 transition-colors border border-gray-200 flex items-center justify-center gap-2">
+              <FaShareAlt /> {t.share}
             </button>
             <Link
               href="https://www.youtube.com/@apnewsbihar6217"
               target="_blank"
               className="w-full sm:w-auto px-8 py-3 bg-white border border-gray-300 text-gray-700 font-bold rounded-full hover:border-gray-400 hover:bg-gray-50 transition-all shadow-sm"
             >
-              Subscribe on YouTube
+              {t.subscribeYouTube}
             </Link>
           </div>
         </div>
