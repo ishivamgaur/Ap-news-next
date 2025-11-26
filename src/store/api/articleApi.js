@@ -218,13 +218,43 @@ export const articleApiSlice = createApi({
 
     //! GET ARTICLE-DETAILS BY ID
     getArticleById: builder.query({
-      query: (id) => ({ url: `articles/${id}`, method: "get" }),
+      query: (id) => ({ url: `/articles/${id}`, method: "get" }),
       providesTags: ["Articles"],
     }),
 
     //! GET VIDEOS ARTICLES
     getVideosArticles: builder.query({
       query: () => ({ url: `/articles/allvideos`, method: "get" }),
+      providesTags: ["Articles"],
+    }),
+
+    //! GET ARTICLES BY CATEGORY (Generic)
+    getArticlesByCategory: builder.query({
+      query: ({ category, page = 1 }) => ({
+        url: `/articles/category/${category}?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        return `${endpointName}-${queryArgs.category}`;
+      },
+      merge: (currentCache, newItems, { arg }) => {
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg.page };
+        }
+        if (arg.page === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
+        currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg.page
+        );
+      },
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg.page > maxLoadedPage;
+      },
       providesTags: ["Articles"],
     }),
   }),
@@ -239,4 +269,5 @@ export const {
   useGetSportsArticlesQuery,
   useGetArticleByIdQuery,
   useGetVideosArticlesQuery,
+  useGetArticlesByCategoryQuery,
 } = articleApiSlice;

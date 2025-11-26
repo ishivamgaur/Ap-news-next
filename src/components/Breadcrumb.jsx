@@ -58,20 +58,27 @@ const Breadcrumb = () => {
                     name.slice(1).replace(/-/g, " ");
               }
 
+              const truncatedName =
+                displayName.length > 15
+                  ? displayName.slice(0, 15) + "..."
+                  : displayName;
+
               return (
                 <li key={name}>
                   <div className="flex items-center">
                     <FaChevronRight className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" />
                     {isLast || isArticleSegment ? (
                       <span className="ms-1 text-sm font-medium text-red-700 md:ms-2">
-                        {displayName}
+                        <span className="md:hidden">{truncatedName}</span>
+                        <span className="hidden md:inline">{displayName}</span>
                       </span>
                     ) : (
                       <Link
                         href={routeTo}
                         className="ms-1 text-sm font-medium text-gray-500 hover:text-red-700 md:ms-2 transition-colors"
                       >
-                        {displayName}
+                        <span className="md:hidden">{truncatedName}</span>
+                        <span className="hidden md:inline">{displayName}</span>
                       </Link>
                     )}
                   </div>

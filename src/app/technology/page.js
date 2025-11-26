@@ -4,7 +4,7 @@ import NewsCard from "@/components/NewsCard";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton";
 import { useGetTechnologyArticlesQuery } from "@/store/api/articleApi";
 
-const Technology = () => {
+const TechnologyPage = () => {
   const [page, setPage] = useState(1);
   const observer = useRef();
   const transformNewsItem = (item) => ({
@@ -43,12 +43,10 @@ const Technology = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {isLoading && page === 1 ? (
           <>
-            {/* Skeleton for Header */}
             <div className="mb-6 animate-pulse">
               <div className="h-10 bg-gray-300 rounded w-48 border-l-4 border-gray-300 pl-4"></div>
               <div className="h-4 bg-gray-300 rounded w-72 mt-4 ml-4"></div>
             </div>
-            {/* Skeleton for News Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(9)].map((_, index) => (
                 <NewsCardSkeleton key={index} />
@@ -63,7 +61,7 @@ const Technology = () => {
                   Technology
                 </h1>
                 <p className="text-gray-600 mt-2 pl-4">
-                  Tech innovations, gadgets, and digital trends
+                  Latest gadgets, software, and tech trends
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -83,21 +81,19 @@ const Technology = () => {
             </>
           ) : null
         ) : (
-          <>
-            <div className="text-center col-span-full py-16">
-              <h2 className="text-2xl font-semibold text-gray-700">
-                No Articles Found
-              </h2>
-              <p className="text-gray-500 mt-2">
-                There are currently no news articles available in this category.
-                Please check back later.
-              </p>
-            </div>
-          </>
+          <div className="text-center col-span-full py-16">
+            <h2 className="text-2xl font-semibold text-gray-700">
+              No Articles Found
+            </h2>
+            <p className="text-gray-500 mt-2">
+              There are currently no news articles available in this category.
+              Please check back later.
+            </p>
+          </div>
         )}
       </div>
     </div>
   );
 };
 
-export default Technology;
+export default TechnologyPage;

@@ -22,7 +22,6 @@ const NewsCard = ({ news }) => {
       // ignore
     }
   };
-
   // bookmark feature removed
 
   return (

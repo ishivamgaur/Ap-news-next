@@ -43,12 +43,10 @@ const BhojpuriPage = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {isLoading && page === 1 ? (
           <>
-            {/* Skeleton for Header */}
             <div className="mb-6 animate-pulse">
               <div className="h-10 bg-gray-300 rounded w-48 border-l-4 border-gray-300 pl-4"></div>
               <div className="h-4 bg-gray-300 rounded w-72 mt-4 ml-4"></div>
             </div>
-            {/* Skeleton for News Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(9)].map((_, index) => (
                 <NewsCardSkeleton key={index} />
@@ -83,17 +81,15 @@ const BhojpuriPage = () => {
             </>
           ) : null
         ) : (
-          <>
-            <div className="text-center col-span-full py-16">
-              <h2 className="text-2xl font-semibold text-gray-700">
-                No Articles Found
-              </h2>
-              <p className="text-gray-500 mt-2">
-                There are currently no news articles available in this category.
-                Please check back later.
-              </p>
-            </div>
-          </>
+          <div className="text-center col-span-full py-16">
+            <h2 className="text-2xl font-semibold text-gray-700">
+              No Articles Found
+            </h2>
+            <p className="text-gray-500 mt-2">
+              There are currently no news articles available in this category.
+              Please check back later.
+            </p>
+          </div>
         )}
       </div>
     </div>
