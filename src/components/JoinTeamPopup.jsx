@@ -253,7 +253,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
     >
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col animate-slideUp border border-gray-100">
         {/* Header */}
-        <div className="relative bg-linear-to-r from-red-800 to-red-900 p-6 md:p-8 text-white shrink-0">
+        <div className="relative bg-linear-to-r from-red-800 to-red-900 p-3 md:p-4 text-white shrink-0">
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-2xl lg:text-3xl font-serif font-bold tracking-tight">
