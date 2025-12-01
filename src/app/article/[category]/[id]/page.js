@@ -3,9 +3,12 @@ import ArticleContent from "./ArticleContent";
 // Fetch article data
 async function getArticle(id) {
   try {
-    const res = await fetch(`http://localhost:5000/api/articles/${id}`, {
-      cache: "no-store", // Ensure fresh data
-    });
+    const res = await fetch(
+      `https://ap-news-b.onrender.com/api/articles/${id}`,
+      {
+        cache: "no-store", // Ensure fresh data
+      }
+    );
 
     if (!res.ok) {
       return null;
