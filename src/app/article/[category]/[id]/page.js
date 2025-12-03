@@ -1,21 +1,41 @@
 import ArticleContent from "./ArticleContent";
+import { headers } from "next/headers";
+import { configureStore } from "@reduxjs/toolkit";
+import { articleApiSlice } from "@/store/api/articleApi";
 
 // Fetch article data
 async function getArticle(id) {
   try {
-    const res = await fetch(
-      `https://ap-news-b.onrender.com/api/articles/${id}`,
-      {
-        cache: "no-store", // Ensure fresh data
-      }
-    );
+    const headersList = await headers();
+    const forwardedFor = headersList.get("x-forwarded-for");
+    const userAgent = headersList.get("user-agent");
 
-    if (!res.ok) {
-      return null;
-    }
+    // Create a temporary store for this request to avoid global state pollution on server
+    const store = configureStore({
+      reducer: {
+        [articleApiSlice.reducerPath]: articleApiSlice.reducer,
+      },
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(articleApiSlice.middleware),
+    });
 
-    const data = await res.json();
-    return data.article || data.data || data;
+    // Dispatch the query
+    const result = await store
+      .dispatch(
+        articleApiSlice.endpoints.getArticleById.initiate(
+          {
+            id,
+            headers: {
+              "x-forwarded-for": forwardedFor || "",
+              "user-agent": userAgent || "",
+            },
+          },
+          { forceRefetch: true } // Ensure we hit the backend for view counting
+        )
+      )
+      .unwrap();
+
+    return result.article || result.data || result;
   } catch (error) {
     console.error("Failed to fetch article:", error);
     return null;

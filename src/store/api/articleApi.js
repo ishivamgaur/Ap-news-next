@@ -218,7 +218,15 @@ export const articleApiSlice = createApi({
 
     //! GET ARTICLE-DETAILS BY ID
     getArticleById: builder.query({
-      query: (id) => ({ url: `/articles/${id}`, method: "get" }),
+      query: (arg) => {
+        const id = typeof arg === "object" ? arg.id : arg;
+        const headers = typeof arg === "object" ? arg.headers : undefined;
+        return {
+          url: `/articles/${id}`,
+          method: "get",
+          headers,
+        };
+      },
       providesTags: ["Articles"],
     }),
 
